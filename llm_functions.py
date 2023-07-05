@@ -1,5 +1,5 @@
 import torch
-from transformers import LlamaTokenizer, LlamaForCausalLM, GenerationConfig, pipeline
+from transformers import LlamaTokenizer, LlamaForCausalLM, pipeline
 from langchain.llms import HuggingFacePipeline
 
 tokenizer = LlamaTokenizer.from_pretrained("eachadea/vicuna-7b-1.1")
