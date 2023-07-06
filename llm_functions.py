@@ -2,9 +2,9 @@ import torch
 from transformers import LlamaTokenizer, LlamaForCausalLM, pipeline
 from langchain.llms import HuggingFacePipeline
 
-tokenizer = LlamaTokenizer.from_pretrained("eachadea/vicuna-7b-1.1")
-
-model = LlamaForCausalLM.from_pretrained("eachadea/vicuna-7b-1.1",
+#tokenizer = LlamaTokenizer.from_pretrained("eachadea/vicuna-7b-1.1")
+tokenizer = LlamaTokenizer.from_pretrained("models/vicuna-7b-1.1")
+model = LlamaForCausalLM.from_pretrained("models/vicuna-7b-1.1",
                                          load_in_8bit=True,
                                          device_map='auto',
                                          torch_dtype=torch.float16,
