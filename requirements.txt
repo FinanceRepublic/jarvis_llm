@@ -3,4 +3,5 @@ sentencepiece
 accelerate
 bitsandbytes
 langchain
+gunicorn
 xformer
