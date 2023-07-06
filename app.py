@@ -8,7 +8,8 @@ app = Flask(__name__)
 def main_flask_fn():
     req_as_json = request.get_json(silent=True, force=True)
     userquery = req_as_json.get('userquery')
-    llm_res = generate_response(userquery)
+    context = req_as_json.get('context')
+    llm_res = generate_response(userquery, context)
     res = jsonify({'userquery': userquery, 'llm_response': llm_res})
     return res
 
