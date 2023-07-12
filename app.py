@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from llm_functions import generate_response
+from llm_functions import ctranslated_response
 
 app = Flask(__name__)
 
@@ -9,7 +9,7 @@ def main_flask_fn():
     req_as_json = request.get_json(silent=True, force=True)
     userquery = req_as_json.get('userquery')
     context = req_as_json.get('context')
-    llm_res = generate_response(userquery, context)
+    llm_res = ctranslated_response(userquery, context)
     res = jsonify({'userquery': userquery, 'llm_response': llm_res})
     return res
 

@@ -5,3 +5,4 @@ bitsandbytes
 langchain
 gunicorn
 xformer
+ctranslate2

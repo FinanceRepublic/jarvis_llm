@@ -1,38 +1,39 @@
-import torch
-from transformers import pipeline
-from langchain.llms import HuggingFacePipeline
-from langchain import PromptTemplate, LLMChain
+import ctranslate2
+import transformers
 
 # model_name = "MBZUAI/LaMini-Flan-T5-783M"
-model_name = "MBZUAI/LaMini-Flan-T5-248M"
+# model_name = "MBZUAI/LaMini-Flan-T5-248M"
 
-pipe = pipeline("text2text-generation",
-                model=model_name,
-                max_length=2048,
-                device_map='cuda:0'
-                )
-
-llm = HuggingFacePipeline(pipeline=pipe)
+translator = ctranslate2.Translator("models/reduced_lamini_248M")
+tokenizer = transformers.AutoTokenizer.from_pretrained("MBZUAI/LaMini-Flan-T5-248M")
 
 
-def generate_response(input_query, context=None):
-
-    input_documents = ""
+def ctranslated_response(question, context=None):
     if context:
-        prompt_template = """ 
+        input_text = f'''Instruction: Answer the following question in detail based on the context
     
-        Answer the following question in more than 40 words.  
-    
-        Context : {context}
-    
-        Question : {question}
-    
-        Answer : """
+                         Context :
+                        
+                         {context}
+                        
+                         Question : {question}
+                        
+                         Answer : '''
 
-        prompt = PromptTemplate.from_template(prompt_template)
+        input_tokens = tokenizer.convert_ids_to_tokens(tokenizer.encode(input_text))
 
-        llm_chain = LLMChain(llm=llm, prompt=prompt)
-        llm_response = llm_chain.predict(context=context, question=input_query)
+        results = translator.translate_batch([input_tokens])
+
+        output_tokens = results[0].hypotheses[0]
+        output_text = tokenizer.decode(tokenizer.convert_tokens_to_ids(output_tokens))
+
     else:
-        llm_response = llm(input_query)
-    return llm_response
+        input_text = question
+        input_tokens = tokenizer.convert_ids_to_tokens(tokenizer.encode(input_text))
+
+        results = translator.translate_batch([input_tokens])
+
+        output_tokens = results[0].hypotheses[0]
+        output_text = tokenizer.decode(tokenizer.convert_tokens_to_ids(output_tokens))
+
+    return output_text
